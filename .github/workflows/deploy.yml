@@ -51,43 +51,28 @@ jobs:
           version: '>= 363.0.0'
       - name: 'Use gcloud'
         run: 'gcloud info'
-      - id: 'deploy_api'
-        name: 'Deploy api'
-        run: |
-          gcloud functions deploy api \
-            --runtime=nodejs18 \
-            --region=us-central1 \
-            --source=./dist \
-            --memory=128MB \
-            --entry-point=api \
-            --trigger-http \
-            --allow-unauthenticated \
-            --max-instances=2
+      # - id: 'deploy_api'
+      #   name: 'Deploy api'
+      #   run: |
+      #     gcloud functions deploy api \
+      #       --runtime=nodejs18 \
+      #       --region=us-central1 \
+      #       --source=./dist \
+      #       --memory=128MB \
+      #       --entry-point=api \
+      #       --trigger-http \
+      #       --allow-unauthenticated \
+      #       --max-instances=2
 
-      - id: 'deploy_cron'
-        name: 'Deploy cron'
-        run: |
-          gcloud functions deploy cron \
-            --runtime=nodejs18 \
-            --region=us-central1 \
-            --source=./dist \
-            --memory=128MB \
-            --entry-point=cron \
-            --trigger-http \
-            --allow-unauthenticated \
-            --max-instances=2
-
-    # - id: 'deploy'
-    #   uses: 'google-github-actions/deploy-cloud-functions@v1'
-    #   with:
-    #     project_id: 'coworkout-20230409'
-    #     name: 'fn'
-    #     source_dir: './functions'
-    #     entry_point: 'api'
-    #     memory_mb: '128'
-    #     region: 'us-central1'
-    #     runtime: 'nodejs16'
-    #     max_instances: 2
-
-    # - id: 'test'
-    #   run: 'curl "${{ steps.deploy.outputs.url }}"'
+      # - id: 'deploy_cron'
+      #   name: 'Deploy cron'
+      #   run: |
+      #     gcloud functions deploy cron \
+      #       --runtime=nodejs18 \
+      #       --region=us-central1 \
+      #       --source=./dist \
+      #       --memory=128MB \
+      #       --entry-point=cron \
+      #       --trigger-http \
+      #       --allow-unauthenticated \
+      #       --max-instances=2

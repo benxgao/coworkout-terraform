@@ -1,1 +1,1 @@
-# Boilerplate of Node.js application
+# Boilerplate of Terraform config
