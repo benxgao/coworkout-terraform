@@ -5,3 +5,8 @@ functions/.env.yaml
 dist
 node_modules
 gha-creds-*.json
+gcp_credentials.json
+terraform/.terraform
+terraform/*.hcl
+terraform/*.tfstate
+terraform/*.backup
