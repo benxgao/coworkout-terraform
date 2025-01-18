@@ -1,0 +1,5 @@
+{
+  "verbose": true,
+  "ignore": ["package.json", "src/__tests__/**/*"],
+  "execMap": {}
+}
