@@ -36,3 +36,9 @@ data "google_iam_policy" "admin" {
     ]
   }
 }
+
+module "random-file" {
+  source  = "./modules/random-file"
+  prefix  = "test"
+  content = "Hi test!"
+}
