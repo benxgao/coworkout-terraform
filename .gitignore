@@ -3,6 +3,7 @@
 .env
 functions/.env.yaml
 **/*/*.log
+**/*/*.txt
 dist
 node_modules
 gha-creds-*.json
