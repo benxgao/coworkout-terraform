@@ -1,36 +1,64 @@
-variable "project_id" {
-  description = "The GCP project ID"
-  type        = string
-}
-variable "instance_name" {
-  type = string
-  description = "Name of the compute instance"
-}
-variable "machine_type" {
-  type = string
-  description = "Machine type for the instance"
-  default = "f1-micro"
-}
-variable "region" {
-  type = string
-  description = "GCP region for the instance"
-  default = "us-east1"
-}
+# variable "project" {
+#   description = "The GCP project ID"
+#   type        = string
+#   default     = "coworkout-20230409"
+# }
 
-variable "zone" {
-  type = string
-  description = "GCP zone for the instance"
-  default = "us-east1-b"
-}
+# variable "region" {
+#   description = "The GCP region"
+#   type        = string
+#   default     = "us-central1"
+# }
 
-variable "startup_script" {
-  type = string
-  description = "Startup script for the instance (optional)"
-  default = ""
-}
+# variable "zone" {
+#   description = "The GCP zone"
+#   type        = string
+#   default     = "us-central1-c"
+# }
 
-variable "tags" {
-  type = list(string)
-  description = "Tags for the instance (optional)"
-  default = []
+# variable "instance_name" {
+#   description = "The name of the VM instance"
+#   type        = string
+#   default     = "terraform-instance"
+# }
+
+# variable "machine_type" {
+#   description = "The machine type for the VM instance"
+#   type        = string
+#   default     = "f1-micro"
+# }
+
+# variable "boot_disk_image" {
+#   description = "The boot disk image for the VM instance"
+#   type        = string
+#   default     = "debian-cloud/debian-11"
+# }
+
+# variable "network_name" {
+#   description = "The name of the VPC network"
+#   type        = string
+#   default     = "terraform-network"
+# }
+
+# variable "iam_policy_member" {
+#   description = "The IAM policy member"
+#   type        = string
+#   default     = "develop@coworkout-20230409.iam.gserviceaccount.com"
+# }
+
+# variable "random_file_prefix" {
+#   description = "The prefix for the random file module"
+#   type        = string
+#   default     = "test"
+# }
+
+# variable "random_file_content" {
+#   description = "The content for the random file module"
+#   type        = string
+#   default     = "Hi test!"
+# }
+
+variable "app_version" {
+type = string
+default = "v1.0.1"
 }
