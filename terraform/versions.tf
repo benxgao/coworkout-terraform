@@ -27,4 +27,10 @@ terraform {
       version = ">= 6.16"
     }
   }
+
+  backend "consul" {
+    address = "localhost:8500"
+    scheme  = "http"
+    path    = "localstack-gcp-terraform"
+  }
 }
