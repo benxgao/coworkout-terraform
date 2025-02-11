@@ -2,12 +2,12 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 6.16"
+      version = "~> 6.16" # Or your preferred version
     }
   }
 }
 
 provider "google" {
-  project = var.project_id
-  region  = var.region
+  project = "coworkout-20230409" # Replace with your project ID
+  region  = "us-central1" # Default region for staging
 }
