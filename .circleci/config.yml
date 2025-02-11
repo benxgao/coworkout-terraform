@@ -1,71 +1,88 @@
 version: 2.1
 
+commands:
+  install_terraform:
+    description: "Install Terraform"
+    steps:
+      - run:
+          name: Install Terraform
+          command: |
+            wget https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip  # Or your desired version
+            unzip terraform_1.5.0_linux_amd64.zip
+            sudo mv terraform /usr/local/bin/
+
+  terraform_init:
+    description: "Initialize Terraform"
+    parameters:
+      env:
+        type: string
+    steps:
+      - run:
+          name: Terraform Init
+          command: |
+            cd terraform/environments/<< parameters.env >>
+            terraform init
+
+  terraform_plan:
+    description: "Plan Terraform deployment"
+    parameters:
+      env:
+        type: string
+    steps:
+      - run:
+          name: Terraform Plan
+          command: |
+            cd terraform/environments/<< parameters.env >>
+            terraform plan
+
+  terraform_apply:
+    description: "Apply Terraform deployment"
+    parameters:
+      env:
+        type: string
+    steps:
+      - run:
+          name: Terraform Apply
+          command: |
+            cd terraform/environments/<< parameters.env >>
+            terraform apply -auto-approve
+          environment:
+            GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
+
 jobs:
   deploy_staging:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
-      - run:
-          name: Install Terraform
-          command: |
-            wget https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip  # Or your desired version
-            unzip terraform_1.5.0_linux_amd64.zip
-            sudo mv terraform /usr/local/bin/
-      - run:
-          name: Terraform Init (Staging)
-          command: |
-            cd environments/staging
-            terraform init
-      - run:
-          name: Terraform Plan (Staging)
-          command: |
-            cd environments/staging
-            terraform plan
-      - run:
-          name: Terraform Apply (Staging)
-          command: |
-            cd environments/staging
-            terraform apply -auto-approve
-          environment:
-            GOOGLE_APPLICATION_CREDENTIALS: /home/circleci/gcp-credentials.json # Path to your service account key
+      - install_terraform
+      - terraform_init:
+          env: staging
+      - terraform_plan:
+          env: staging
+      - terraform_apply:
+          env: staging
       - persist_to_workspace:
           root: .
           paths:
-            - environments/staging/.terraform* # Persist Terraform state
+            - terraform/environments/staging/.terraform* # Persist Terraform state
 
   deploy_production:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
-      - run:
-          name: Install Terraform
-          command: |
-            wget https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip  # Or your desired version
-            unzip terraform_1.5.0_linux_amd64.zip
-            sudo mv terraform /usr/local/bin/
-      - run:
-          name: Terraform Init (Production)
-          command: |
-            cd environments/production
-            terraform init
-      - run:
-          name: Terraform Plan (Production)
-          command: |
-            cd environments/production
-            terraform plan
-      - run:
-          name: Terraform Apply (Production)
-          command: |
-            cd environments/production
-            terraform apply -auto-approve
-          environment:
-            GOOGLE_APPLICATION_CREDENTIALS: /home/circleci/gcp-credentials.json # Path to your service account key
+      - install_terraform
+      - terraform_init:
+          env: production
+      - terraform_plan:
+          env: production
+      - terraform_apply:
+          env: production
       - persist_to_workspace:
           root: .
           paths:
-            - environments/production/.terraform* # Persist Terraform state
+            - terraform/environments/production/.terraform* # Persist Terraform state
 
 workflows:
   terraform_deploy:
