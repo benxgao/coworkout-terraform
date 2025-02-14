@@ -1,30 +1,8 @@
 version: 2.1
 
 commands:
-  install_terraform:
-    description: "Install Terraform"
-    steps:
-      - run:
-          name: Install Terraform
-          command: |
-            wget https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip  # Or your desired version
-            unzip terraform_1.5.0_linux_amd64.zip
-            sudo mv terraform /usr/local/bin/
-
-  terraform_init:
-    description: "Initialize Terraform"
-    parameters:
-      env:
-        type: string
-    steps:
-      - run:
-          name: Terraform Init
-          command: |
-            cd terraform/environments/<< parameters.env >>
-            terraform init
-
-  terraform_plan:
-    description: "Plan Terraform deployment"
+  terraform_init_plan_apply:
+    description: 'Plan Terraform deployment'
     parameters:
       env:
         type: string
@@ -33,10 +11,17 @@ commands:
           name: Terraform Plan
           command: |
             cd terraform/environments/<< parameters.env >>
-            terraform plan
+            terraform init -input=false
+            terraform plan -out tfapply
+          environment:
+            GOOGLE_APPLICATION_CREDENTIALS: /root/.gcp/credentials.json
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
   terraform_apply:
-    description: "Apply Terraform deployment"
+    description: 'Apply Terraform deployment'
     parameters:
       env:
         type: string
@@ -45,22 +30,64 @@ commands:
           name: Terraform Apply
           command: |
             cd terraform/environments/<< parameters.env >>
-            terraform apply -auto-approve
+            terraform apply -auto-approve tfapply
           environment:
-            GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
+            GOOGLE_APPLICATION_CREDENTIALS: /root/.gcp/credentials.json
+
+  terraform_plan_destroy:
+    description: 'Plan Terraform destroy'
+    parameters:
+      env:
+        type: string
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Terraform Create Destroy Plan
+          command: |
+            cd terraform/environments/<< parameters.env >>
+            terraform plan -destroy -out tfdestroy
+          environment:
+            GOOGLE_APPLICATION_CREDENTIALS: /root/.gcp/credentials.json
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  terraform_destroy:
+    description: 'Destroy Terraform deployment'
+    parameters:
+      env:
+        type: string
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Terraform Destroy
+          command: |
+            cd terraform/environments/<< parameters.env >>
+            terraform apply -auto-approve tfdestroy
+          environment:
+            GOOGLE_APPLICATION_CREDENTIALS: /root/.gcp/credentials.json
 
 jobs:
   deploy_staging:
     docker:
-      - image: cimg/base:stable
+      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
       - checkout
-      - install_terraform
-      - terraform_init:
-          env: staging
-      - terraform_plan:
+      - run:
+          name: Setup GCP Credentials
+          command: |
+            mkdir -p /root/.gcp
+            echo $GOOGLE_APPLICATION_CREDENTIALS > /root/.gcp/credentials.json
+      - terraform_init_plan_apply:
           env: staging
       - terraform_apply:
+          env: staging
+      - terraform_plan_destroy:
+          env: staging
+      - terraform_destroy:
           env: staging
       - persist_to_workspace:
           root: .
@@ -69,15 +96,21 @@ jobs:
 
   deploy_production:
     docker:
-      - image: cimg/base:stable
+      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
       - checkout
-      - install_terraform
-      - terraform_init:
-          env: production
-      - terraform_plan:
+      - run:
+          name: Setup GCP Credentials
+          command: |
+            mkdir -p /root/.gcp
+            echo $GOOGLE_APPLICATION_CREDENTIALS > /root/.gcp/credentials.json
+      - terraform_init_plan_apply:
           env: production
       - terraform_apply:
+          env: production
+      - terraform_plan_destroy:
+          env: production
+      - terraform_destroy:
           env: production
       - persist_to_workspace:
           root: .

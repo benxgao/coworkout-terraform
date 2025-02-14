@@ -20,17 +20,21 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 6.16"
+      version = ">= 6.20.0"
     }
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = ">= 6.16"
+      version = ">= 6.20.0"
     }
   }
 
-  backend "consul" {
-    address = "localhost:8500"
-    scheme  = "http"
-    path    = "localstack-gcp-terraform"
+  # backend "consul" {
+  #   address = "localhost:8500"
+  #   scheme  = "http"
+  #   path    = "environments/staging"
+  # }
+  backend "gcs" {
+    bucket = "coworkout-20230409-terraform-state"
+    prefix = "environments/staging"
   }
 }
