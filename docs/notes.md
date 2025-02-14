@@ -11,6 +11,9 @@ Confirm permissions
 - Compute Instance Admin
 - Compute Network Admin
 - Service Account User
+- Storage Admin
+- Storage Object Admin
+- Storage Object Viewer
 
 Confirm gcp credential json file
 

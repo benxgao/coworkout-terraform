@@ -1,6 +1,7 @@
 resource "google_compute_instance" "default" {
   name         = var.instance_name
-  machine_type = "f1-micro"
+  machine_type = var.machine_type
+  # region         = var.region
   zone         = var.zone
 
   boot_disk {

@@ -1,8 +1,10 @@
 module "compute_instance" {
   source = "../../modules/compute_instance"
 
-  instance_name  = "staging-vm-instance"
-  zone           = "us-central1-a"      # Example zone
-  startup_script = file("./startup.sh") # Example startup script
-  tags           = ["staging", "web-server"]
+  instance_name  = var.instance_name
+  machine_type   = var.machine_type
+  # region         = var.region
+  zone           = var.zone
+  startup_script = file(var.startup_script)
+  tags           = var.tags
 }
