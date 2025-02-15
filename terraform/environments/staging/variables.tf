@@ -14,13 +14,13 @@ variable "machine_type" {
 variable "region" {
   type = string
   description = "GCP region for the instance"
-  default = "us-east1"
+  default = "australia-southeast1"
 }
 
 variable "zone" {
   type = string
   description = "GCP zone for the instance"
-  default = "us-east1-b"
+  default = "australia-southeast1-b"
 }
 
 variable "startup_script" {
