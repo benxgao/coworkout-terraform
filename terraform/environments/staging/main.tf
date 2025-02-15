@@ -8,3 +8,8 @@ module "compute_instance" {
   startup_script = file(var.startup_script)
   tags           = var.tags
 }
+
+# output "instance_name" {
+#   value       = module.compute_instance.instance_name
+#   description = "Name of the created instance"
+# }

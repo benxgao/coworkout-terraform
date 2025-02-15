@@ -1,3 +1,7 @@
+# variable "network_names" {
+#   type = set(string)
+# }
+
 variable "instance_name" {
   type = string
   description = "Name of the compute instance"
@@ -7,12 +11,6 @@ variable "machine_type" {
   description = "Machine type for the instance"
   default = "f1-micro"
 }
-
-# variable "region" {
-#   type = string
-#   description = "GCP region for the instance"
-#   default = "us-east1"
-# }
 
 variable "zone" {
   type = string
