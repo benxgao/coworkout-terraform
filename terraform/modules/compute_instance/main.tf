@@ -58,9 +58,11 @@ resource "google_compute_instance" "default" {
   #     host     = self.public_ip
   #   }
   # }
-
 }
 
+output "instance_id" {
+  value = google_compute_instance.default.id
+}
 
 # data "google_compute_instance" "existing_instance" {
 #   name = var.instance_name

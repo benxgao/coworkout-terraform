@@ -2,7 +2,7 @@ version: 2.1
 
 commands:
   terraform_init_plan_apply:
-    description: 'Plan Terraform deployment'
+    description: "Plan Terraform deployment"
     parameters:
       env:
         type: string
@@ -21,7 +21,7 @@ commands:
             - .
 
   terraform_apply:
-    description: 'Apply Terraform deployment'
+    description: "Apply Terraform deployment"
     parameters:
       env:
         type: string
@@ -33,9 +33,14 @@ commands:
             terraform apply -auto-approve tfapply
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: /root/.gcp/credentials.json
+      - run:
+          name: Retrieve Instance ID
+          command: |
+            INSTANCE_ID=$(terraform output -raw instance_id)
+            echo "The instance ID is: $INSTANCE_ID"
 
   terraform_plan_destroy:
-    description: 'Plan Terraform destroy'
+    description: "Plan Terraform destroy"
     parameters:
       env:
         type: string
@@ -55,7 +60,7 @@ commands:
             - .
 
   terraform_destroy:
-    description: 'Destroy Terraform deployment'
+    description: "Destroy Terraform deployment"
     parameters:
       env:
         type: string
