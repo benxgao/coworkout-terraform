@@ -27,14 +27,4 @@ terraform {
       version = ">= 6.20.0"
     }
   }
-
-  # backend "consul" {
-  #   address = "localhost:8500"
-  #   scheme  = "http"
-  #   path    = "environments/staging"
-  # }
-  backend "gcs" {
-    bucket = "coworkout-20230409-terraform-state"
-    prefix = "environments/staging"
-  }
 }
