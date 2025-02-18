@@ -8,11 +8,11 @@ commands:
         type: string
     steps:
       - run:
-          name: Terraform Plan
+          name: Terraform Init and Plan
           command: |
             cd terraform/environments/<< parameters.env >>
             terraform init -input=false
-            terraform plan -out tfapply
+            terraform plan -out=tfplan
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: /root/.gcp/credentials.json
       - persist_to_workspace:
@@ -30,12 +30,13 @@ commands:
           name: Terraform Apply
           command: |
             cd terraform/environments/<< parameters.env >>
-            terraform apply -auto-approve tfapply
+            terraform apply -auto-approve tfplan
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: /root/.gcp/credentials.json
       - run:
           name: Retrieve Instance ID
           command: |
+            terraform refresh
             INSTANCE_ID=$(terraform output -raw instance_id)
             echo "The instance ID is: $INSTANCE_ID"
 
@@ -51,7 +52,7 @@ commands:
           name: Terraform Create Destroy Plan
           command: |
             cd terraform/environments/<< parameters.env >>
-            terraform plan -destroy -out tfdestroy
+            terraform plan -destroy -out=tfplan-destroy
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: /root/.gcp/credentials.json
       - persist_to_workspace:
@@ -71,14 +72,14 @@ commands:
           name: Terraform Destroy
           command: |
             cd terraform/environments/<< parameters.env >>
-            terraform apply -auto-approve tfdestroy
+            terraform apply -auto-approve tfplan-destroy
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: /root/.gcp/credentials.json
 
 jobs:
-  deploy_staging:
+  deploy_staging_apply:
     docker:
-      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+      - image: hashicorp/terraform:light
     steps:
       - checkout
       - run:
@@ -90,18 +91,10 @@ jobs:
           env: staging
       - terraform_apply:
           env: staging
-      - terraform_plan_destroy:
-          env: staging
-      - terraform_destroy:
-          env: staging
-      - persist_to_workspace:
-          root: .
-          paths:
-            - terraform/environments/staging/.terraform* # Persist Terraform state
 
-  deploy_production:
+  deploy_staging_destroy:
     docker:
-      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+      - image: hashicorp/terraform:light
     steps:
       - checkout
       - run:
@@ -109,29 +102,31 @@ jobs:
           command: |
             mkdir -p /root/.gcp
             echo $GOOGLE_APPLICATION_CREDENTIALS > /root/.gcp/credentials.json
-      - terraform_init_plan_apply:
-          env: production
-      - terraform_apply:
-          env: production
       - terraform_plan_destroy:
-          env: production
+          env: staging
       - terraform_destroy:
-          env: production
-      - persist_to_workspace:
-          root: .
-          paths:
-            - terraform/environments/production/.terraform* # Persist Terraform state
+          env: staging
 
 workflows:
   terraform_deploy:
     jobs:
-      - deploy_staging:
+      - deploy_staging_apply:
           filters:
             branches:
               only:
                 - staging
-      - deploy_production:
+      - hold_staging_destroy:
+          type: approval
+          requires:
+            - deploy_staging_apply
           filters:
             branches:
               only:
-                - master
+                - staging
+      - deploy_staging_destroy:
+          requires:
+            - hold_staging_destroy
+          filters:
+            branches:
+              only:
+                - staging
