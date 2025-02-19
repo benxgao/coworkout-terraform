@@ -110,7 +110,15 @@ jobs:
 workflows:
   terraform_deploy:
     jobs:
+      - start_staging:
+          type: approval
+          filters:
+            branches:
+              only:
+                - staging
       - deploy_staging_apply:
+          requires:
+            - start_staging
           filters:
             branches:
               only:
