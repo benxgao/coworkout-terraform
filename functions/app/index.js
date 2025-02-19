@@ -1,7 +1,7 @@
 const express = require('express');
-const { inspect } = require('util');
+// const { inspect } = require('util');
 
-const mongoConn = require('./common/mongo_conn');
+// const mongoConn = require('./common/mongo_conn');
 
 const module1Router = require('./module_1/router');
 
@@ -11,24 +11,27 @@ const app = express();
 
 app.use(express.json());
 
-console.log('env', inspect(process.env));
+// console.log('env', inspect(process.env));
 
-app.use(async (req, res, next, error) => {
-  if (error) {
-    console.log('app.use error', error);
-  }
+// app.use(async (req, res, next, error) => {
+//   if (error) {
+//     console.log('app.use error', error);
+//   }
 
-  await mongoConn()
-    .then((x) => {
-      console.log('app.use mongo', x);
-      return next();
-    })
-    .catch((err) => {
-      return next(err);
-    });
-});
+//   await mongoConn()
+//     .then((x) => {
+//       console.log('app.use mongo',
+// x);
+//       return next();
+//     })
+//     .catch((err) => {
+//       return next(err);
+//     });
+// });
 
 app.get('/', (req, res) => {
+  console.log('connected');
+
   res.send('Hello World');
 });
 
