@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:alpine3.16 AS base
+FROM node:20-alpine AS base
 
 # Set the working directory
 WORKDIR /root/app
@@ -23,7 +23,7 @@ COPY . .
 RUN npm run test
 
 # Final stage
-FROM node:alpine3.16 AS final
+FROM node:20-alpine AS final
 
 # Set the working directory
 WORKDIR /root/app
