@@ -1,12 +1,12 @@
 {
-  "name": "coworkout",
-  "version": "0.1.0",
-  "description": "Practice of Node.JS Serverless architecture",
+  "name": "coworkout-terraform",
+  "version": "1.0.0",
+  "description": "Practice of Terraform deployment",
   "keywords": [
-    "Serverless",
-    "Node.JS"
+    "terraform",
+    "CI/CD"
   ],
-  "author": "Xingbin Gao <xingbingao@gmail.com> (https://github.com/benxgao)",
+  "author": "Xingbin Gao <hi@benxgao.com> (https://github.com/benxgao)",
   "license": "Apache-2.0",
   "main": "functions/express_server.js",
   "scripts": {
