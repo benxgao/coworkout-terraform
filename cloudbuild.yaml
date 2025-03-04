@@ -64,5 +64,5 @@
 # - [string, string, ...]
 
 # docker build \
-#     -t gcr.io/coworkout-20230409/github.com/benxgao/coworkout-run:$COMMIT_SHA \
+#     -t gcr.io/coworkout-250305/github.com/benxgao/coworkout-run:$COMMIT_SHA \
 #     .

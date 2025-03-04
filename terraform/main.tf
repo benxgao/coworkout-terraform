@@ -1,5 +1,5 @@
 provider "google" {
-  project = "coworkout-20230409"
+  project = "coworkout-250305"
   region  = "us-central1"
   zone    = "us-central1-c"
 }
@@ -32,7 +32,7 @@ data "google_iam_policy" "admin" {
     role = "roles/compute.instanceAdmin"
 
     members = [
-      "develop@coworkout-20230409.iam.gserviceaccount.com",
+      "develop@coworkout-250305.iam.gserviceaccount.com",
     ]
   }
 }

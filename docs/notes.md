@@ -23,13 +23,14 @@ cat /Users/[user]/.config/gcloud/application_default_credentials.json
 
 cat $GOOGLE_APPLICATION_CREDENTIALS
 
-
 export GOOGLE_APPLICATION_CREDENTIALS=/Users/.../gcp_credentials.json
 
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 
 # Try login if "terraform apply" does not work
 gcloud auth application-default login
+
+gcloud auth application-default set-quota-project coworkout-250305
 
 # Config Consul
 

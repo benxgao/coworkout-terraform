@@ -1,4 +1,4 @@
-project_id = "coworkout-20230409"
+project_id = "coworkout-250305"
 
 instance_name  = "staging-vm-instance"
 machine_type   = "f1-micro"

@@ -3,7 +3,7 @@ locals {
   app_labels     = { app = local.app_name }
   replicas       = 2
   container_port = 8080
-  image          = "gcr.io/coworkout-20230409/gke-demo-app-node:v1"
+  image          = "gcr.io/coworkout-250305/gke-demo-app-node:v1"
 }
 
 resource "kubernetes_deployment" "gke_demo_app_node" {
