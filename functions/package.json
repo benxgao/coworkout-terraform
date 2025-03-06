@@ -1,13 +1,15 @@
 {
   "name": "coworkout-terraform",
   "version": "1.0.0",
-  "description": "Practice of Terraform deployment",
+  "description": "Boilerplate template of Terraform with CircleCI for GCP",
   "keywords": [
-    "terraform",
+    "Terraform",
+    "CircleCI",
+    "GCP",
     "CI/CD"
   ],
-  "author": "Xingbin Gao <hi@benxgao.com> (https://github.com/benxgao)",
-  "license": "Apache-2.0",
+  "author": "Ben Gao <hi@benxgao.com> (https://github.com/benxgao)",
+  "license": "MIT",
   "main": "functions/express_server.js",
   "scripts": {
     "reset_dist": "rm -rf ./dist && mkdir dist && cp package.json dist/package.json && cp package-lock.json dist/package-lock.json",

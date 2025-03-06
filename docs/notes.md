@@ -15,6 +15,13 @@ Confirm permissions
 - Storage Object Admin
 - Storage Object Viewer
 
+- Artifact Registry Writer
+- Service Account Admin
+- Project IAM Admin
+- Serverless VPC Access Admin
+- Cloud SQL Admin
+- Cloud Run Admin
+
 Confirm gcp credential json file
 
 ```sh
@@ -31,6 +38,8 @@ export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 gcloud auth application-default login
 
 gcloud auth application-default set-quota-project coworkout-250305
+
+gsutil mb -p coworkout-250306 -l us-central1 gs://coworkout-250306
 
 # Config Consul
 

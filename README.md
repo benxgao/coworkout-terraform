@@ -1,4 +1,4 @@
-# Boilerplate of Terraform deployment with CircleCI
+# Boilerplate template of Terraform with CircleCI for GCP
 
 ## Run in local
 
